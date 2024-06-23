@@ -1,3 +1,4 @@
+from datetime import datetime
 import sqlite3
 
 #FUNCIÓN PARA CONECTAR LA BD
@@ -86,6 +87,7 @@ def crear_tablas(cursor):
         FOREIGN KEY (grupo_id) REFERENCES grupo(id)
     )
     ''')
+    
 
 # Función para insertar un director
 def insertar_director(cursor, nombre_director):
@@ -181,6 +183,13 @@ def obtener_datos_profesor(cursor, profesor_id, grupo_id):
     ''', (profesor_id, grupo_id))
     return cursor.fetchall()
 
+def obtener_profesor(cursor, profesor_id):
+    cursor.execute('''
+    SELECT nombre
+    FROM profesor
+    WHERE id = ?''', (profesor_id))
+    return cursor.fetchone()
+
 def asignar_calificaciones(cursor, profesor_id, grupo_id):
     # Obtener datos del profesor y el grupo específico
     datos_profesor = obtener_datos_profesor(cursor, profesor_id, grupo_id)
@@ -199,13 +208,39 @@ def asignar_calificaciones(cursor, profesor_id, grupo_id):
             asignar_calificacion(cursor, alumno_id, calificacion)
             print(f"Calificación asignada a {alumno_nombre}: {calificacion}")
 
-def asignar_comentarios(cursor, profesor_id):
-    # Obtener datos del profesor y sus grupos
-    datos_profesor = obtener_datos_profesor(cursor, profesor_id)
+
+def asignar_Comentarios(cursor, profesor_id, grupo_id):
+    # Obtener datos del profesor y el grupo específico
+    datos_profesor = obtener_datos_profesor(cursor, profesor_id, grupo_id)
     for profesor_nombre, grupo_id, grupo_nombre in datos_profesor:
         print(f"Profesor: {profesor_nombre}, Grupo: {grupo_nombre}")
         # Obtener alumnos del grupo
         alumnos = obtener_alumnos_por_grupo(cursor, grupo_id)
         for alumno_id, alumno_nombre in alumnos:
-            calificacion = int(input(f"Ingrese la calificación para {alumno_nombre}: "))
-            asignar_calificacion(cursor, alumno_id, calificacion)         
+            while True:
+                try:
+                    comentario = int(input(f"Ingrese un comentario para {alumno_nombre}: "))
+                    break
+                except ValueError:
+                    print("Error")
+            fecha = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            escribir_reporte(cursor, profesor_id, alumno_id, grupo_id, comentario, fecha)
+
+def obtener_grupos(cursor, profesor_id):
+    # Ejecución de la consulta SQL para obtener los grupos del profesor por ID
+    cursor.execute('''
+        SELECT g.nombre
+        FROM grupo g
+        INNER JOIN profesor_grupo pg ON g.id = pg.grupo_id
+        WHERE pg.profesor_id = ?
+    ''', (profesor_id,))
+    
+    # Obtener el resultado de la consulta
+    resultados = cursor.fetchall()
+    
+    # Comprobar si se encontraron grupos para el profesor
+    if resultados:
+        return [grupo[0] for grupo in resultados]
+    else:
+        return []
+
