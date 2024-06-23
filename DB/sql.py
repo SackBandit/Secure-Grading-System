@@ -40,7 +40,8 @@ def crear_tablas(cursor):
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS alumno (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        nombre TEXT NOT NULL
+        nombre TEXT NOT NULL,
+        calificacion INTEGER
     )
     ''')
     #Creación de la tabla grupo
@@ -66,6 +67,21 @@ def crear_tablas(cursor):
         alumno_id INTEGER,
         grupo_id INTEGER,
         PRIMARY KEY (alumno_id, grupo_id),
+        FOREIGN KEY (alumno_id) REFERENCES alumno(id),
+        FOREIGN KEY (grupo_id) REFERENCES grupo(id)
+    )
+    ''')
+
+    # Crear la tabla comentarios
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS comentarios (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        profesor_id INTEGER,
+        alumno_id INTEGER,
+        grupo_id INTEGER,
+        comentario TEXT NOT NULL,
+        fecha TEXT NOT NULL,
+        FOREIGN KEY (profesor_id) REFERENCES profesor(id),
         FOREIGN KEY (alumno_id) REFERENCES alumno(id),
         FOREIGN KEY (grupo_id) REFERENCES grupo(id)
     )
@@ -103,3 +119,76 @@ def asignar_profesor_a_grupo(cursor, profesor_id, grupo_id):
 # Función para asignar un alumno a un grupo
 def asignar_alumno_a_grupo(cursor, alumno_id, grupo_id):
     cursor.execute('INSERT INTO alumno_grupo (alumno_id, grupo_id) VALUES (?, ?)', (alumno_id, grupo_id))
+
+
+#Funcion para generar reportes
+def escribir_reporte(cursor, profesor_id, alumno_id, grupo_id, comentario, fecha):
+    cursor.execute('''
+    INSERT INTO comentarios (profesor_id, alumno_id, grupo_id, comentario, fecha)
+    VALUES (?, ?, ?, ?, ?)''', (profesor_id, alumno_id, grupo_id, comentario, fecha))
+
+def obtener_reportes(cursor):
+    cursor.execute('''
+    SELECT 
+        comentarios.id,
+        profesor.nombre AS nombre_profesor,
+        alumno.nombre AS nombre_alumno,
+        grupo.nombre AS nombre_grupo,
+        reporte_comentarios.comentario,
+        reporte_comentarios.fecha
+    FROM 
+        reporte_comentarios
+    JOIN 
+        profesor ON reporte_comentarios.profesor_id = profesor.id
+    JOIN 
+        alumno ON reporte_comentarios.alumno_id = alumno.id
+    JOIN 
+        grupo ON reporte_comentarios.grupo_id = grupo.id;
+    ''')
+    return cursor.fetchall()
+
+#Asignar calificacion
+def asignar_calificacion(cursor, alumno_id, calificacion):
+    cursor.execute('''
+    UPDATE alumno
+    SET calificacion = ?
+    WHERE id = ?''', (calificacion, alumno_id))
+
+def obtener_alumno_con_calificacion(cursor, alumno_id):
+    cursor.execute('''
+    SELECT nombre, calificacion
+    FROM alumno
+    WHERE id = ?''', (alumno_id,))
+    return cursor.fetchone()
+
+
+def obtener_alumnos_por_grupo(cursor, grupo_id):
+    cursor.execute('''
+    SELECT alumno.id, alumno.nombre
+    FROM alumno
+    JOIN alumno_grupo ON alumno.id = alumno_grupo.alumno_id
+    WHERE alumno_grupo.grupo_id = ?
+    ''', (grupo_id,))
+    return cursor.fetchall()
+
+def obtener_datos_profesor(cursor, profesor_id):
+    cursor.execute('''
+    SELECT profesor.nombre, grupo.id, grupo.nombre
+    FROM profesor
+    JOIN profesor_grupo ON profesor.id = profesor_grupo.profesor_id
+    JOIN grupo ON profesor_grupo.grupo_id = grupo.id
+    WHERE profesor.id = ?
+    ''', (profesor_id,))
+    return cursor.fetchall()
+
+def asignar_calificaciones(cursor, profesor_id):
+    # Obtener datos del profesor y sus grupos
+    datos_profesor = obtener_datos_profesor(cursor, profesor_id)
+    for profesor_nombre, grupo_id, grupo_nombre in datos_profesor:
+        print(f"Profesor: {profesor_nombre}, Grupo: {grupo_nombre}")
+        # Obtener alumnos del grupo
+        alumnos = obtener_alumnos_por_grupo(cursor, grupo_id)
+        for alumno_id, alumno_nombre in alumnos:
+            calificacion = int(input(f"Ingrese la calificación para {alumno_nombre}: "))
+            asignar_calificacion(cursor, alumno_id, calificacion)
+            print(f"Calificación asignada a {alumno_nombre} : {calificacion}")
