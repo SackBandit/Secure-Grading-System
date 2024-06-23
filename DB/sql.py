@@ -171,17 +171,35 @@ def obtener_alumnos_por_grupo(cursor, grupo_id):
     ''', (grupo_id,))
     return cursor.fetchall()
 
-def obtener_datos_profesor(cursor, profesor_id):
+def obtener_datos_profesor(cursor, profesor_id, grupo_id):
     cursor.execute('''
     SELECT profesor.nombre, grupo.id, grupo.nombre
     FROM profesor
     JOIN profesor_grupo ON profesor.id = profesor_grupo.profesor_id
     JOIN grupo ON profesor_grupo.grupo_id = grupo.id
-    WHERE profesor.id = ?
-    ''', (profesor_id,))
+    WHERE profesor.id = ? AND grupo.id = ?
+    ''', (profesor_id, grupo_id))
     return cursor.fetchall()
 
-def asignar_calificaciones(cursor, profesor_id):
+def asignar_calificaciones(cursor, profesor_id, grupo_id):
+    # Obtener datos del profesor y el grupo específico
+    datos_profesor = obtener_datos_profesor(cursor, profesor_id, grupo_id)
+    for profesor_nombre, grupo_id, grupo_nombre in datos_profesor:
+        print(f"Profesor: {profesor_nombre}, Grupo: {grupo_nombre}")
+        # Obtener alumnos del grupo
+        alumnos = obtener_alumnos_por_grupo(cursor, grupo_id)
+        for alumno_id, alumno_nombre in alumnos:
+            while True:
+                try:
+                    calificacion = int(input(f"Ingrese la calificación para {alumno_nombre}: "))
+                    break
+                except ValueError:
+                    print("Por favor, ingrese un número entero válido para la calificación.")
+            
+            asignar_calificacion(cursor, alumno_id, calificacion)
+            print(f"Calificación asignada a {alumno_nombre}: {calificacion}")
+
+def asignar_comentarios(cursor, profesor_id):
     # Obtener datos del profesor y sus grupos
     datos_profesor = obtener_datos_profesor(cursor, profesor_id)
     for profesor_nombre, grupo_id, grupo_nombre in datos_profesor:
@@ -190,5 +208,4 @@ def asignar_calificaciones(cursor, profesor_id):
         alumnos = obtener_alumnos_por_grupo(cursor, grupo_id)
         for alumno_id, alumno_nombre in alumnos:
             calificacion = int(input(f"Ingrese la calificación para {alumno_nombre}: "))
-            asignar_calificacion(cursor, alumno_id, calificacion)
-            print(f"Calificación asignada a {alumno_nombre} : {calificacion}")
+            asignar_calificacion(cursor, alumno_id, calificacion)         
