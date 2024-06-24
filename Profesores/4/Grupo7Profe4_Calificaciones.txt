@@ -1,0 +1,25 @@
+Profesor: Nidia
+ID del Curso: 7
+Nombre del Curso: Sistemas Operatios
+
+Alumnos y Calificaciones:
+- José Morales: 6
+- Luis Santos: 8
+- Isabel Delgado: 5
+- Jorge Rubio: 7
+- Ramón Fernández: 10
+- Rafael Moreno: 5
+- Beatriz Ruiz: 6
+- Beatriz Vicente: 7
+- José Delgado: 7
+- María López: 8
+- Nuria Gil: 9
+- Pilar García: 8
+- Francisco Nuñez: 5
+- Elena Hernández: 7
+- Fernando Vázquez: 6
+- Ana Herrera: 9
+- Nuria Ortega: 10
+- Teresa Guerrero: 7
+- Eva Flores: 10
+- Víctor Medina: 6

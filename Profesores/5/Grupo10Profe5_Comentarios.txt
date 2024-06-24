@@ -1,0 +1,47 @@
+Profesor: Sigfrido Cifuentes
+ID del Curso: 10
+Nombre del Curso: Analisis y Diseño de Sistemas
+
+Alumnos y Comentarios:
+- Miguel Garrido: Hola
+- Antonio Castro: Adios
+- Sergio Guerrero: fewfw
+- Ángela Medina: 
+- Pilar Álvarez: fw
+- Beatriz Navarro: ef
+- Inés Gil: wef
+- Luis Nuñez: we
+- Luis Herrera: fwe
+- Javier Romero: f
+- Marta Rubio: wef
+- Enrique Blanco: wef
+- Yolanda Molina: we
+- Eduardo Jiménez: f
+- Nuria Domínguez: ewf
+- Pablo Herrera: ewf
+- Fernando Vázquez: ew
+- Rafael Medina: fw
+- Marta Vicente: ef
+- Lucía Delgado: wef
+- Miguel Garrido: Su participación activa en clase demuestra un gran interés por la materia.
+- Antonio Castro: Es importante que practique más [habilidad específica] para afianzar sus conocimientos.
+- Sergio Guerrero: Se destaca por su capacidad de análisis y resolución de problemas.
+- Ángela Medina: Demuestra un gran entusiasmo por aprender y participar en clase.
+- Pilar Álvarez: Su creatividad y pensamiento crítico enriquecen las discusiones en clase.
+- Beatriz Navarro: Es importante que se esfuerce por entregar sus tareas a tiempo y completas.
+- Inés Gil: Necesita mejorar su capacidad de análisis y comprensión de textos complejos.
+- Luis Nuñez: Es un compañero colaborativo y siempre dispuesto a ayudar a los demás.
+- Luis Herrera: Sería beneficioso que buscara ayuda adicional si tiene dificultades en [área específica].
+- Javier Romero: Debe trabajar en su habilidad para trabajar en equipo y colaborar con sus compañeros.
+- Marta Rubio: Es importante que practique más [habilidad específica] para afianzar sus conocimientos.
+- Enrique Blanco: Es un compañero colaborativo y siempre dispuesto a ayudar a los demás.
+- Yolanda Molina: Su participación activa en clase demuestra un gran interés por la materia.
+- Eduardo Jiménez: Se destaca por su capacidad de análisis y resolución de problemas.
+- Nuria Domínguez: Es un estudiante autónomo y responsable con sus tareas y proyectos.
+- Pablo Herrera: Su dedicación y esfuerzo se reflejan en sus excelentes resultados.
+- Fernando Vázquez: Su dedicación y esfuerzo se reflejan en sus excelentes resultados.
+- Rafael Medina: Su creatividad y pensamiento crítico enriquecen las discusiones en clase.
+- Marta Vicente: Debe trabajar en su habilidad para trabajar en equipo y colaborar con sus compañeros.
+- Lucía Delgado: Su dedicación y esfuerzo se reflejan en sus excelentes resultados.
+
+Reporte generado el: 2024-06-24 02:46:33

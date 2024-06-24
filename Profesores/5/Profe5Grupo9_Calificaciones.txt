@@ -1,0 +1,25 @@
+Profesor: Sigfrido Cifuentes
+ID del Curso: 9
+Nombre del Curso: Administración de Redes
+
+Alumnos y Calificaciones:
+- Laura Ortega: 4
+- Eduardo Sanz: 5
+- Sergio Ramírez: 6
+- Jorge López: 7
+- María Jiménez: 8
+- Cristina Sánchez: 9
+- Ángela González: 9
+- Ramón Álvarez: 8
+- Nuria Molina: 8
+- Yolanda Medina: 8
+- Nuria Morales: 8
+- Pedro González: 8
+- Víctor García: 8
+- Víctor Flores: 8
+- David Navarro: 8
+- Teresa Gil: 7
+- Ángela Rodríguez: 7
+- Luis Ramírez: 8
+- Miguel Cano: 7
+- Alejandro García: 7

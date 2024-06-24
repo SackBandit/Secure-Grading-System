@@ -1,0 +1,25 @@
+Profesor: Sigfrido Cifuentes
+ID del Curso: 10
+Nombre del Curso: Analisis y Diseño de Sistemas
+
+Alumnos y Calificaciones:
+- Miguel Garrido: 8
+- Antonio Castro: 6
+- Sergio Guerrero: 5
+- Ángela Medina: 7
+- Pilar Álvarez: 8
+- Beatriz Navarro: 8
+- Inés Gil: 5
+- Luis Nuñez: 6
+- Luis Herrera: 7
+- Javier Romero: 5
+- Marta Rubio: 6
+- Enrique Blanco: 8
+- Yolanda Molina: 8
+- Eduardo Jiménez: 8
+- Nuria Domínguez: 9
+- Pablo Herrera: 7
+- Fernando Vázquez: 6
+- Rafael Medina: 8
+- Marta Vicente: 6
+- Lucía Delgado: 9

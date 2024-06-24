@@ -1,0 +1,9 @@
+Profesor: Sandra Díaz
+ID del Curso: 1
+Nombre del Curso: Criptografía
+
+Alumnos y Comentarios:
+- Dany: Es un flojo
+- Dany: No trabaja nunca
+
+Reporte generado el: 2024-06-23 21:04:41

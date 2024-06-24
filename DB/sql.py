@@ -1,5 +1,6 @@
 from datetime import datetime
 import sqlite3
+import random
 
 #FUNCIÓN PARA CONECTAR LA BD
 def conectar_bd(nombre_bd):
@@ -198,16 +199,40 @@ def asignar_calificaciones(cursor, profesor_id, grupo_id):
         # Obtener alumnos del grupo
         alumnos = obtener_alumnos_por_grupo(cursor, grupo_id)
         for alumno_id, alumno_nombre in alumnos:
-            while True:
-                try:
-                    calificacion = int(input(f"Ingrese la calificación para {alumno_nombre}: "))
-                    break
-                except ValueError:
-                    print("Por favor, ingrese un número entero válido para la calificación.")
+            calificacion = random.randint(5,10)
+            #while True:
+             #   try:
+              #      print(f"Ingrese la calificación para {alumno_nombre} es : {calificacion}")
+               #     break
+                #except ValueError:
+                 #   print("Por favor, ingrese un número entero válido para la calificación.")
             
             asignar_calificacion(cursor, alumno_id, calificacion)
             print(f"Calificación asignada a {alumno_nombre}: {calificacion}")
 
+
+comentarios = [
+    "Demuestra un gran entusiasmo por aprender y participar en clase.",
+    "Su dedicación y esfuerzo se reflejan en sus excelentes resultados.",
+    "Ha progresado notablemente en [área específica] gracias a su perseverancia.",
+    "Es un compañero colaborativo y siempre dispuesto a ayudar a los demás.",
+    "Su creatividad y pensamiento crítico enriquecen las discusiones en clase.",
+    "Ha desarrollado habilidades de organización y gestión del tiempo muy efectivas.",
+    "Se destaca por su capacidad de análisis y resolución de problemas.",
+    "Es un estudiante autónomo y responsable con sus tareas y proyectos.",
+    "Su participación activa en clase demuestra un gran interés por la materia.",
+    "Ha superado las expectativas en [área específica] gracias a su dedicación.",
+    "Con un poco más de esfuerzo y constancia, puede alcanzar todo su potencial.",
+    "Necesita mejorar su organización y planificación para cumplir con los plazos.",
+    "Debe prestar más atención en clase y participar activamente en las discusiones.",
+    "Es importante que practique más [habilidad específica] para afianzar sus conocimientos.",
+    "Sería beneficioso que buscara ayuda adicional si tiene dificultades en [área específica].",
+    "Es fundamental que mejore su capacidad de concentración y atención en clase.",
+    "Debe trabajar en su habilidad para trabajar en equipo y colaborar con sus compañeros.",
+    "Es importante que se esfuerce por entregar sus tareas a tiempo y completas.",
+    "Necesita mejorar su capacidad de análisis y comprensión de textos complejos.",
+    "Debe desarrollar estrategias de estudio más efectivas para optimizar su aprendizaje."
+]
 
 def asignar_Comentarios(cursor, profesor_id, grupo_id):
     # Obtener datos del profesor y el grupo específico
@@ -217,19 +242,21 @@ def asignar_Comentarios(cursor, profesor_id, grupo_id):
         # Obtener alumnos del grupo
         alumnos = obtener_alumnos_por_grupo(cursor, grupo_id)
         for alumno_id, alumno_nombre in alumnos:
-            while True:
-                try:
-                    comentario = input(f"Ingrese un comentario para {alumno_nombre}: ")
-                    break
-                except ValueError:
-                    print("Error")
+            comentario = random.choice(comentarios)
+            #while True:
+             #   try:
+              #      comentario = input(f"Ingrese un comentario para {alumno_nombre}: ")
+               #     break
+                #except ValueError:
+                 #   print("Error")
             fecha = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            print(f"Comentario de {alumno_nombre}: {comentario}" )
             escribir_reporte(cursor, profesor_id, alumno_id, grupo_id, comentario, fecha)
 
 def obtener_grupos(cursor, profesor_id):
     # Ejecución de la consulta SQL para obtener los grupos del profesor por ID
     cursor.execute('''
-        SELECT g.nombre
+        SELECT g.nombre, g.id
         FROM grupo g
         INNER JOIN profesor_grupo pg ON g.id = pg.grupo_id
         WHERE pg.profesor_id = ?
@@ -240,7 +267,7 @@ def obtener_grupos(cursor, profesor_id):
     
     # Comprobar si se encontraron grupos para el profesor
     if resultados:
-        return [grupo[0] for grupo in resultados]
+        return [grupo for grupo in resultados]
     else:
         return []
 
@@ -270,6 +297,8 @@ def obtener_Reporte_Calificaciones(cursor, profesor_id, grupo_id):
     
     return informacion
 
+def vaciar_califiaciones(cursor, grupo_id, profesor_id):
+    print()
 
 def obtener_reporte_completo(cursor, profesor_id, grupo_id):
     # Obtener datos del profesor y el grupo específico

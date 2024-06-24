@@ -3,6 +3,9 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from DB.sql import obtener_profesor,conectar_bd,crear_tablas,obtener_grupos,asignar_calificaciones,asignar_Comentarios,obtener_Reporte_Calificaciones,obtener_reporte_completo
 from funcionesBD import guardar_informacion_en_archivo
+
+import AES
+
 #Iniciar sesión
 def Cargo(operador):
     if operador=='Director':
@@ -28,16 +31,17 @@ def AccionesProfesor(conn,cursor,clave,operador):
     if operador=='Calificar':
         print( 'Tienes los siguientes grupos:')
         obtener_grupos(cursor,clave)
-        grupos = obtener_grupos(cursor, clave)
+        grupos= obtener_grupos(cursor, clave)
         # Mostrar los grupos obtenidos
         if grupos:
             print(f"\n---Grupos asignados---")
-            i=1
+            i=0
             for grupo in grupos:
                 
-                print(i, ". ",grupo)
+                print(grupo[1], ". ",grupo[0])
                 i=i+1
             grupoCalif=input("Ingresa el grupo que quieres evarluar: ")
+
             asignar_calificaciones(cursor,clave,grupoCalif)
             # Realizar la acción
             conn.commit()
@@ -59,7 +63,7 @@ def AccionesProfesor(conn,cursor,clave,operador):
             i=1
             for grupo in grupos:
                 
-                print(i, ". ",grupo)
+                print(grupo[1], ". ",grupo[0])
                 i=i+1
             grupoComentario=input("Ingresa el grupo que quieres realizar comentarios: ")
             asignar_Comentarios(cursor,clave,grupoComentario)
@@ -87,7 +91,7 @@ def AccionesProfesor(conn,cursor,clave,operador):
             i=1
             for grupo in grupos:
                 
-                print(i, ". ",grupo)
+                print(grupo[1], ". ",grupo[0])
                 i=i+1
             grupoReporte=input("Ingresa el grupo que quieres realizar su reporte de calificaciones: ")
             reporteCalif= obtener_Reporte_Calificaciones(cursor,clave,grupoReporte)
@@ -113,11 +117,38 @@ def AccionesProfesor(conn,cursor,clave,operador):
         else:
             print(f"No se encontraron grupos para el profesor {clave}")
     elif operador=='Enviar Reporte':
-            #El usuario debe visualizar los reportes que contiene la carpeta
-            #El usuario selecciona el reporte a enviar
-            opcion=input('¿Cuál reporte quieres enviar?')
-            #Se lee el archivo
-            #Se aplica AES y RSA
+            
+            ruta_directorio = f"Profesores/{clave}"  # Ruta al directorio
+            reportes = []
+
+            try:
+                archivos = os.listdir(ruta_directorio)
+                i = 1
+                for archivo in archivos:
+                    print(f"{i}. {archivo}")
+                    reportes.append(archivo)
+                    i = i + 1
+            except FileNotFoundError:
+                print(f"El directorio '{ruta_directorio}' no se encontró.")
+            except PermissionError:
+                print(f"No tienes permisos para acceder al directorio '{ruta_directorio}'.")
+            opcion=int(input('¿Cuál reporte quieres enviar?'))
+            
+            if 0 <= opcion < len(archivos):
+                ruta_archivo = os.path.join(ruta_directorio, archivos[opcion])
+                with open(ruta_archivo, "r") as f:
+                    contenido = f.read()
+                    print("\nContenido del archivo:")
+                    print(contenido)
+            else:
+                print("Selección inválida.")
+            
+            c, key = AES.cifrarAES(contenido)
+            print(c)
+            print(key)
+
+            #RSA
+
 
     else:
         return "Proceso Finalizado"
