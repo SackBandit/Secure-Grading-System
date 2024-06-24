@@ -1,7 +1,7 @@
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from DB.sql import obtener_profesor,conectar_bd,crear_tablas,obtener_grupos,asignar_calificaciones
+from DB.sql import obtener_profesor,conectar_bd,crear_tablas,obtener_grupos,asignar_calificaciones,asignar_Comentarios
 #Iniciar sesión
 def Cargo(operador):
     if operador=='Director':
@@ -46,9 +46,31 @@ def AccionesProfesor(conn,cursor,clave,operador):
 
        
 
-    elif operador=='Realizar Reportes':
-        print('Realizar Reportes')
-    elif operador=='Enviar Reporte':
+    elif operador=='Realizar Comentarios':
+        print('Realizar Comentarios')
+        print( 'Tienes los siguientes grupos:')
+        obtener_grupos(cursor,clave)
+        grupos = obtener_grupos(cursor, clave)
+        # Mostrar los grupos obtenidos
+        if grupos:
+            print(f"\n---Grupos asignados---")
+            i=1
+            for grupo in grupos:
+                
+                print(i, ". ",grupo)
+                i=i+1
+            grupoComentario=input("Ingresa el grupo que quieres realizar comentarios: ")
+            asignar_Comentarios(cursor,clave,grupoComentario)
+            # Realizar la acción
+            conn.commit()
+            
+            print("\nFicha descriptiva Finalizada!")
+        else:
+            print(f"No se encontraron grupos para el profesor {clave}")
+
+
+        
+    elif operador=='Realizar y Enviar Reporte':
         print('Enviar Reporte a supervisor')
     else:
         return "Proceso Finalizado"
@@ -63,7 +85,7 @@ def profesor():
         print("Bienvenido, ",profesor[0])
         while(True):
             claveProfesor=indentificador
-            print("\n\n\n¿Qué acción quieres realizar? \n1.Calificar \n2.Realizar Reporte \n3.Enviar Reporte")
+            print("\n\n\n¿Qué acción quieres realizar? \n1.Calificar \n2.Realizar Comentarios \n3.Enviar Reporte")
             opcion= input("Ingresa tu opción: ")
             AccionesProfesor(conn,cursor,claveProfesor,opcion)
             # Cerrar la conexión

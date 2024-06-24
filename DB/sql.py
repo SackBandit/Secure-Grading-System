@@ -219,7 +219,7 @@ def asignar_Comentarios(cursor, profesor_id, grupo_id):
         for alumno_id, alumno_nombre in alumnos:
             while True:
                 try:
-                    comentario = int(input(f"Ingrese un comentario para {alumno_nombre}: "))
+                    comentario = input(f"Ingrese un comentario para {alumno_nombre}: ")
                     break
                 except ValueError:
                     print("Error")
