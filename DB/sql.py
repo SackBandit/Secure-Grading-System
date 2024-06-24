@@ -244,3 +244,67 @@ def obtener_grupos(cursor, profesor_id):
     else:
         return []
 
+
+def obtener_Reporte_Calificaciones(cursor, profesor_id, grupo_id):
+    # Obtener datos del profesor y el grupo específico
+    datos_profesor = obtener_datos_profesor(cursor, profesor_id, grupo_id)
+    
+    if not datos_profesor:
+        return "No se encontraron datos para el profesor o el grupo especificado."
+    
+    profesor_nombre, grupo_id, grupo_nombre = datos_profesor[0]
+    
+    # Obtener alumnos del grupo y sus calificaciones
+    alumnos = obtener_alumnos_por_grupo(cursor, grupo_id)
+    
+    # Construir el string con la información
+    informacion = f"Profesor: {profesor_nombre}\nID del Curso: {grupo_id}\nNombre del Curso: {grupo_nombre}\n\nAlumnos y Calificaciones:\n"
+    
+    for alumno_id, alumno_nombre in alumnos:
+        alumno = obtener_alumno_con_calificacion(cursor, alumno_id)
+        if alumno:
+            nombre_alumno, calificacion = alumno
+            informacion += f"- {nombre_alumno}: {calificacion}\n"
+        else:
+            informacion += f"- {alumno_nombre}: Sin calificación\n"
+    
+    return informacion
+
+
+def obtener_reporte_completo(cursor, profesor_id, grupo_id):
+    # Obtener datos del profesor y el grupo específico
+    cursor.execute('''
+    SELECT profesor.nombre, grupo.id, grupo.nombre
+    FROM profesor
+    JOIN profesor_grupo ON profesor.id = profesor_grupo.profesor_id
+    JOIN grupo ON profesor_grupo.grupo_id = grupo.id
+    WHERE profesor.id = ? AND grupo.id = ?
+    ''', (profesor_id, grupo_id))
+    datos_profesor = cursor.fetchone()
+
+    if not datos_profesor:
+        return "No se encontraron datos para el profesor o el grupo especificado."
+    
+    profesor_nombre, grupo_id, grupo_nombre = datos_profesor
+    
+    # Obtener alumnos del grupo y sus comentarios
+    cursor.execute('''
+    SELECT alumno.nombre, comentarios.comentario
+    FROM alumno
+    JOIN alumno_grupo ON alumno.id = alumno_grupo.alumno_id
+    JOIN comentarios ON alumno.id = comentarios.alumno_id
+    WHERE alumno_grupo.grupo_id = ? AND comentarios.profesor_id = ?
+    ''', (grupo_id, profesor_id))
+    alumnos_comentarios = cursor.fetchall()
+    
+    # Construir el string con la información
+    informacion = f"Profesor: {profesor_nombre}\nID del Curso: {grupo_id}\nNombre del Curso: {grupo_nombre}\n\nAlumnos y Comentarios:\n"
+    
+    for alumno_nombre, comentario in alumnos_comentarios:
+        informacion += f"- {alumno_nombre}: {comentario}\n"
+    
+    # Añadir la fecha y hora del reporte
+    fecha_reporte = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    informacion += f"\nReporte generado el: {fecha_reporte}\n"
+    
+    return informacion

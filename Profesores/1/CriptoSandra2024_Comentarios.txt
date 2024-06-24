@@ -1,0 +1,9 @@
+Profesor: Sandra Díaz
+ID del Curso: 2
+Nombre del Curso: Topics of Critography
+
+Alumnos y Comentarios:
+- Isaac: Es un flojo
+- Guillermo: Igual
+
+Reporte generado el: 2024-06-23 20:20:20

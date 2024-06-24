@@ -1,0 +1,7 @@
+Profesor: Sandra Díaz
+ID del Curso: 2
+Nombre del Curso: Topics of Critography
+
+Alumnos y Calificaciones:
+- Isaac: 3
+- Guillermo: 10
