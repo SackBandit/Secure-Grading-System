@@ -1,6 +1,0 @@
-Profesor: Sandra Díaz
-ID del Curso: 1
-Nombre del Curso: Criptografía
-
-Alumnos y Calificaciones:
-- Dany: 10

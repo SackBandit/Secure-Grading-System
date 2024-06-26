@@ -1,0 +1,25 @@
+Profesor: Nidia
+ID del Curso: 7
+Nombre del Curso: Sistemas Operatios
+
+Alumnos y Calificaciones:
+- Ana Hernández: None
+- Ángela Garrido: None
+- Teresa Gómez: None
+- Raquel Ruiz: None
+- David Pérez: None
+- Laura Rubio: None
+- Ramón García: None
+- Yolanda Domínguez: None
+- Isabel Gil: None
+- Raquel Sanz: None
+- Lucía Torres: None
+- Rafael Blanco: None
+- Rafael Gómez: None
+- Beatriz Iglesias: None
+- Miguel Sanz: None
+- Manuel Suárez: None
+- Manuel Medina: None
+- Sofía Moreno: None
+- Víctor Herrera: None
+- Rafael Díaz: None

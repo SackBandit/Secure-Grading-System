@@ -2,11 +2,17 @@ import sys
 import os
 from datetime import datetime
 import random
+import base64
+from Crypto.PublicKey import RSA
+from Crypto.Cipher import PKCS1_OAEP
+from Crypto.Random import get_random_bytes
+from Crypto.Hash import SHA256
 # Asegurar que la carpeta padre esté en el PATH
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from DB.sql import conectar_bd, crear_tablas,insertar_alumno,insertar_director,insertar_grupo,insertar_profesor,insertar_supervisor,asignar_alumno_a_grupo,asignar_profesor_a_grupo,escribir_reporte,asignar_calificaciones
-
+from AES import generar_clave_aes,cifrar_aes,descifrar_aes
+from RSA import encrypt_message,decrypt_message
 
 def guardar_informacion_en_archivo(ruta_archivo, informacion):
     # Asegurarse de que el directorio existe
@@ -17,6 +23,40 @@ def guardar_informacion_en_archivo(ruta_archivo, informacion):
     with open(ruta_archivo, 'w', encoding='utf-8') as archivo:
         archivo.write(informacion)
 
+
+def Profesor_SupervisorCypher(texto_plano, llavePublica):
+    # Aquí asumimos que `texto_plano` es una cadena de texto (str)
+    clave = generar_clave_aes()
+    iv, texto_cifrado = cifrar_aes(texto_plano, clave)
+    k = encrypt_message(clave, llavePublica)
+    return iv, texto_cifrado, k
+ 
+def Profesor_SupervisorDeCypher(clave_rsa, k):
+    # Decodificar la clave privada RSA desde formato PEM
+    clave_rsa_decodificada = RSA.import_key(clave_rsa)
+    
+    # Crear un objeto cipher RSA para descifrar
+    cipher_rsa = PKCS1_OAEP.new(clave_rsa_decodificada)
+    
+    # Descifrar la clave de sesión K con RSA
+    llaveK = cipher_rsa.decrypt(k)
+    print(llaveK)
+    ## Decodificar IV desde base64
+    #iv = base64.b64decode(iv_Des)
+    
+    # Descifrar el mensaje con AES
+    #cipher_aes = AES.new(llaveK, AES.MODE_CBC, iv)
+    #texto_plano = cipher_aes.decrypt(msj_cifrado)
+    
+    # Eliminar el padding PKCS7
+    #texto_plano = eliminar_padding_PKCS7(texto_plano)
+    
+    return 1 #texto_plano.decode('utf-8')
+
+# Función auxiliar para eliminar el padding PKCS7
+def eliminar_padding_PKCS7(data):
+    pad = data[-1]
+    return data[:-pad]
 {'''
 # Conectar a la base de datos
 conn, cursor = conectar_bd('escuela.db')
@@ -24,74 +64,73 @@ conn, cursor = conectar_bd('escuela.db')
 crear_tablas(cursor)
 
 
-
 alumnos = [
-    ("María", "García"),
-    ("Juan", "López"),
-    ("Ana", "Martínez"),
-    ("Pedro", "Rodríguez"),
-    ("Sofía", "González"),
-    ("Carlos", "Fernández"),
-    ("Laura", "Sánchez"),
-    ("Luis", "Pérez"),
-    ("Isabel", "Gómez"),
-    ("Javier", "Díaz"),
+    ("Maria", "Garcia"),
+    ("Juan", "Lopez"),
+    ("Ana", "Martinez"),
+    ("Pedro", "Rodriguez"),
+    ("Sofia", "Gonzalez"),
+    ("Carlos", "Fernandez"),
+    ("Laura", "Sanchez"),
+    ("Luis", "Perez"),
+    ("Isabel", "Gomez"),
+    ("Javier", "Diaz"),
     ("Carmen", "Moreno"),
-    ("Miguel", "Jiménez"),
+    ("Miguel", "Jimenez"),
     ("Rosa", "Ruiz"),
-    ("Alejandro", "Álvarez"),
-    ("Lucía", "Romero"),
+    ("Alejandro", "Alvarez"),
+    ("Lucia", "Romero"),
     ("Pablo", "Navarro"),
     ("Elena", "Torres"),
-    ("Daniel", "Domínguez"),
+    ("Daniel", "Dominguez"),
     ("Marta", "Gil"),
-    ("Sergio", "Vázquez"),
+    ("Sergio", "Vazquez"),
     ("Pilar", "Blanco"),
-    ("José", "Serrano"),
-    ("Raquel", "Ramírez"),
-    ("Antonio", "Suárez"),
+    ("Jose", "Serrano"),
+    ("Raquel", "Ramirez"),
+    ("Antonio", "Suarez"),
     ("Cristina", "Molina"),
     ("Francisco", "Morales"),
     ("Irene", "Ortega"),
     ("Manuel", "Delgado"),
     ("Teresa", "Castro"),
-    ("David", "Marín"),
+    ("David", "Marin"),
     ("Andrea", "Rubio"),
     ("Enrique", "Sanz"),
-    ("Beatriz", "Nuñez"),
+    ("Beatriz", "Nunez"),
     ("Jorge", "Iglesias"),
     ("Silvia", "Medina"),
     ("Rafael", "Flores"),
     ("Nuria", "Vicente"),
     ("Fernando", "Garrido"),
-    ("Inés", "Santos"),
-    ("Ramón", "Lozano"),
+    ("Ines", "Santos"),
+    ("Ramon", "Lozano"),
     ("Eva", "Cano"),
     ("Eduardo", "Guerrero"),
-    ("Ángela", "Cruz"),
-    ("Víctor", "Hernández"),
+    ("Angela", "Cruz"),
+    ("Victor", "Hernandez"),
     ("Yolanda", "Herrera")
 ]
 
-id_grupo = insertar_grupo(cursor, 'Criptografía')  
+id_grupo = insertar_grupo(cursor, 'Criptografia')  
 id_grupo2 = insertar_grupo(cursor, 'Avanzadas')  
 id_grupo3 = insertar_grupo(cursor, 'Topics of Criptography')
 id_grupo4 = insertar_grupo(cursor, 'Sistemas en Chip')  
-id_grupo5 = insertar_grupo(cursor, 'Diseño de sistemas digitales')
+id_grupo5 = insertar_grupo(cursor, 'Diseno de sistemas digitales')
 id_grupo6 = insertar_grupo(cursor, 'Inteligencia artificial')  
 id_grupo7 = insertar_grupo(cursor, 'Sistemas Operatios') 
-id_grupo8 = insertar_grupo(cursor, 'Móviles')  
-id_grupo9 = insertar_grupo(cursor, 'Administración de Redes') 
-id_grupo10 = insertar_grupo(cursor, 'Analisis y Diseño de Sistemas')  
+id_grupo8 = insertar_grupo(cursor, 'Moviles')  
+id_grupo9 = insertar_grupo(cursor, 'Administracion de Redes') 
+id_grupo10 = insertar_grupo(cursor, 'Analisis y Diseno de Sistemas')  
 id_grupo11 = insertar_grupo(cursor, 'FEPI')
 id_grupo12 = insertar_grupo(cursor, 'Ingenieria de Software')   
 
 id_director = insertar_director(cursor, 'Linares Vallejo Erick')
 id_supervisor = insertar_supervisor(cursor, 'Mosso García', id_director)
 
-id_profesor1 = insertar_profesor(cursor, 'Sandra Díaz', id_supervisor)
+id_profesor1 = insertar_profesor(cursor, 'Sandra Diaz', id_supervisor)
 id_profesor2 = insertar_profesor(cursor, 'Idalia Maldonado', id_supervisor)
-id_profesor3 = insertar_profesor(cursor, 'Veronica Domínguez', id_supervisor)
+id_profesor3 = insertar_profesor(cursor, 'Veronica Dominguez', id_supervisor)
 id_profesor4 = insertar_profesor(cursor, 'Nidia', id_supervisor)
 id_profesor5 = insertar_profesor(cursor, 'Sigfrido Cifuentes', id_supervisor)
 id_profesor6 = insertar_profesor(cursor, 'Ismael Mexicano', id_supervisor)

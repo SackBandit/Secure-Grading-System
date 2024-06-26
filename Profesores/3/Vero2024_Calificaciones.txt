@@ -1,0 +1,25 @@
+Profesor: Veronica Domínguez
+ID del Curso: 6
+Nombre del Curso: Inteligencia artificial
+
+Alumnos y Calificaciones:
+- Lucía Cruz: None
+- Yolanda Lozano: None
+- Ana Vicente: None
+- Daniel Blanco: None
+- Inés Blanco: None
+- Pedro Blanco: None
+- Fernando Marín: None
+- Raquel Blanco: None
+- Elena Iglesias: None
+- Pilar Marín: None
+- María Romero: None
+- Nuria Lozano: None
+- Eva Castro: None
+- Alejandro Ortega: None
+- José Moreno: None
+- David Hernández: None
+- Juan Marín: None
+- Andrea Vázquez: None
+- Yolanda Nuñez: None
+- Ramón Gómez: None

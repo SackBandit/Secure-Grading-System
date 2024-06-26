@@ -1,0 +1,7 @@
+Profesor: Nidia
+ID del Curso: 7
+Nombre del Curso: Sistemas Operatios
+
+Alumnos y Comentarios:
+
+Reporte generado el: 2024-06-25 13:50:03

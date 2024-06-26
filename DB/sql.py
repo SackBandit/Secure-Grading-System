@@ -15,8 +15,10 @@ def crear_tablas(cursor):
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS director (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        nombre TEXT NOT NULL
-   
+        nombre TEXT NOT NULL,
+        clave_Privada TEXT,
+        clave_Publica TEXT,
+        iv TEXT
         
     )
     ''')
@@ -26,6 +28,9 @@ def crear_tablas(cursor):
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         nombre TEXT NOT NULL,
         director_id INTEGER,
+        clave_Privada TEXT,
+        clave_Publica TEXT,
+        iv TEXT,
         FOREIGN KEY(director_id) REFERENCES director(id)
     )
     ''')
@@ -35,6 +40,9 @@ def crear_tablas(cursor):
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         nombre TEXT NOT NULL,
         supervisor_id INTEGER,
+        clave_Privada TEXT,
+        clave_Publica TEXT,
+        iv TEXT,
         FOREIGN KEY(supervisor_id) REFERENCES supervisor(id)
     )
     ''')
@@ -191,6 +199,22 @@ def obtener_profesor(cursor, profesor_id):
     WHERE id = ?''', (profesor_id))
     return cursor.fetchone()
 
+def obtener_supervisor(cursor, supervisor_id):
+    cursor.execute('''
+    SELECT nombre
+    FROM supervisor
+    WHERE id = ?''', (supervisor_id))
+    return cursor.fetchone()
+
+def obtener_director(cursor, director_id):
+    cursor.execute('''
+    SELECT nombre
+    FROM director
+    WHERE id = ?''', (director_id))
+    return cursor.fetchone()
+
+
+
 def asignar_calificaciones(cursor, profesor_id, grupo_id):
     # Obtener datos del profesor y el grupo específico
     datos_profesor = obtener_datos_profesor(cursor, profesor_id, grupo_id)
@@ -208,7 +232,7 @@ def asignar_calificaciones(cursor, profesor_id, grupo_id):
                  #   print("Por favor, ingrese un número entero válido para la calificación.")
             
             asignar_calificacion(cursor, alumno_id, calificacion)
-            print(f"Calificación asignada a {alumno_nombre}: {calificacion}")
+            print(f"Calificacion asignada a {alumno_nombre}: {calificacion}")
 
 
 comentarios = [
@@ -293,7 +317,7 @@ def obtener_Reporte_Calificaciones(cursor, profesor_id, grupo_id):
             nombre_alumno, calificacion = alumno
             informacion += f"- {nombre_alumno}: {calificacion}\n"
         else:
-            informacion += f"- {alumno_nombre}: Sin calificación\n"
+            informacion += f"- {alumno_nombre}: Sin calificacion\n"
     
     return informacion
 
@@ -337,3 +361,55 @@ def obtener_reporte_completo(cursor, profesor_id, grupo_id):
     informacion += f"\nReporte generado el: {fecha_reporte}\n"
     
     return informacion
+
+
+#FUNCIONES PARA OBTENER LA LLAVE PUBLICA Y PRIVADA
+def obtener_ClavesProfesor(cursor, profesor_id):
+    cursor.execute('''
+    SELECT clave_Privada,clave_Publica,iv
+    FROM profesor
+    WHERE id = ?''', (profesor_id))
+    return cursor.fetchone()
+
+
+
+#FUNCIONES PARA OBTENER LA LLAVE PUBLICA Y PRIVADA
+def obtener_ClavesDirector(cursor, director_id):
+    cursor.execute('''
+    SELECT clave_Privada,clave_Publica,iv
+    FROM director
+    WHERE id = ?''', (director_id))
+    return cursor.fetchone()
+
+
+
+#FUNCIONES PARA OBTENER LA LLAVE PUBLICA Y PRIVADA
+def obtener_ClavesSupervisor(cursor, supervisor_id):
+    cursor.execute('''
+    SELECT clave_Privada,clave_Publica,iv
+    FROM supervisor
+    WHERE id = ?''', (supervisor_id))
+    return cursor.fetchone()
+
+def actualizar_claves_profesor(cursor, profesor_id, clave_privada, clave_publica,iv):
+    cursor.execute('''
+    UPDATE profesor
+    SET clave_Privada = ?, clave_Publica = ?, iv= ? WHERE id = ?''', (clave_privada, clave_publica, iv, profesor_id))
+    # Asegúrate de confirmar los cambios si estás usando una conexión a una base de datos
+    cursor.connection.commit()
+
+
+def actualizar_claves_supervisor(cursor, profesor_id, clave_privada, clave_publica,iv):
+    cursor.execute('''
+    UPDATE supervisor
+    SET clave_Privada = ?, clave_Publica = ?, iv= ? WHERE id = ?''', (clave_privada, clave_publica, iv, profesor_id))
+    # Asegúrate de confirmar los cambios si estás usando una conexión a una base de datos
+    cursor.connection.commit()
+
+def actualizar_claves_director(cursor, profesor_id, clave_privada, clave_publica,iv):
+    cursor.execute('''
+    UPDATE director
+    SET clave_Privada = ?, clave_Publica = ?, iv= ? WHERE id = ?''', (clave_privada, clave_publica, iv, profesor_id))
+    # Asegúrate de confirmar los cambios si estás usando una conexión a una base de datos
+    cursor.connection.commit()
+

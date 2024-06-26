@@ -1,0 +1,7 @@
+Profesor: Veronica Domínguez
+ID del Curso: 6
+Nombre del Curso: Inteligencia artificial
+
+Alumnos y Comentarios:
+
+Reporte generado el: 2024-06-25 13:16:27
